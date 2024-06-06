@@ -1,10 +1,17 @@
 const prompts = require('prompts');
 
 (async () => {
-    const word: string = 'codelex';
-    const wordParts: string[] = word.split('');
+    const words: string[] = [
+      'programming',
+      'trasher',
+      'destroyer',
+      'typescrypt'
+    ]
 
-    let targetWord: string[] = '_'.repeat(word.length).split('');
+    const word: string = words[(Math.random() * words.length) | 0];
+    const wordParts: string[] = word.split(''); // ['c', 'o', ...]
+
+    let targetWord: string[] = '_'.repeat(word.length).split(''); // ['_', '_', ...]
 
     let guesses: number = 0;
     const maxGuesses: number = word.length+3;
@@ -22,14 +29,15 @@ const prompts = require('prompts');
 
         console.log(wordParts.includes(response.letter));
 
-        let letterPosition = wordParts.indexOf(response.letter);
+        let letterPosition = wordParts.indexOf(response.letter); // position of typed letter
+
             // check if letter exists in word
           if (letterPosition > -1) {
-            targetWord[letterPosition] = response.letter;
+            targetWord[letterPosition] = response.letter; // letter gets inserted
             wordParts[letterPosition] = '-'
 
             if (word == targetWord.join('')) {
-              console.log("Correct");
+              console.log("Correct! The word was: " +  targetWord.join(''));
               break;
             }
           }

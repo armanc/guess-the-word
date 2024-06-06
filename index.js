@@ -37,11 +37,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 var prompts = require('prompts');
 (function () { return __awaiter(_this, void 0, void 0, function () {
-    var word, wordParts, targetWord, guesses, maxGuesses, response, letterPosition;
+    var words, word, wordParts, targetWord, guesses, maxGuesses, response, letterPosition;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                word = 'codelex';
+                words = [
+                    'programming',
+                    'trasher',
+                    'destroyer',
+                    'typescrypt'
+                ];
+                word = words[(Math.random() * words.length) | 0];
                 wordParts = word.split('');
                 targetWord = '_'.repeat(word.length).split('');
                 guesses = 0;
@@ -61,10 +67,10 @@ var prompts = require('prompts');
                 letterPosition = wordParts.indexOf(response.letter);
                 // check if letter exists in word
                 if (letterPosition > -1) {
-                    targetWord[letterPosition] = response.letter;
+                    targetWord[letterPosition] = response.letter; // letter gets inserted
                     wordParts[letterPosition] = '-';
                     if (word == targetWord.join('')) {
-                        console.log("Correct");
+                        console.log("Correct! The word was " + targetWord.join(' '));
                         return [3 /*break*/, 3];
                     }
                 }
