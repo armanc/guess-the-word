@@ -64,7 +64,8 @@ var prompts = require('prompts');
                     targetWord[letterPosition] = response.letter;
                     wordParts[letterPosition] = '-';
                     if (word == targetWord.join('')) {
-                        guesses += 999;
+                        console.log("Correct");
+                        return [3 /*break*/, 3];
                     }
                 }
                 guesses++;
@@ -72,10 +73,7 @@ var prompts = require('prompts');
                 console.log('');
                 return [3 /*break*/, 1];
             case 3:
-                if (word == targetWord.join('')) {
-                    console.log("Correct");
-                }
-                else {
+                if (word != targetWord.join('')) {
                     console.log("You loose!");
                 }
                 return [2 /*return*/];

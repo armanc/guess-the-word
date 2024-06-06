@@ -29,23 +29,19 @@ const prompts = require('prompts');
             wordParts[letterPosition] = '-'
 
             if (word == targetWord.join('')) {
-              guesses +=999;
+              console.log("Correct");
+              break;
             }
-
           }
-
-          
-
+        
           guesses++;
           
           console.log('Vārds: '+targetWord.join(' '))
           console.log('')
     }
 
-    if (word == targetWord.join('')) {
-        console.log("Correct");
-    } else {
-        console.log("You loose!");
+    if (word != targetWord.join('')) {
+      console.log("You loose!");
     }
 
 
