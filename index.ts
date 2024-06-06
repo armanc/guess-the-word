@@ -1,59 +1,55 @@
 const prompts = require('prompts');
 
 (async () => {
-    const words: string[] = [
-      'programming',
-      'trasher',
-      'destroyer',
-      'typescrypt'
-    ]
+  const words: string[] = [
+    'programming',
+    'trasher',
+    'destroyer',
+    'typescrypt'
+  ]
 
-    const word: string = words[(Math.random() * words.length) | 0];
-    const wordParts: string[] = word.split(''); // ['c', 'o', ...]
+  const word: string = words[Math.floor(Math.random() * words.length)];
+  const wordParts: string[] = word.split(''); // ['c', 'o', ...]
+  let targetWord: string[] = '_'.repeat(word.length).split(''); // ['_', '_', ...
+  let guesses: number = 0;
+  const maxGuesses: number = word.length + 3;
 
-    let targetWord: string[] = '_'.repeat(word.length).split(''); // ['_', '_', ...]
+  console.log('Vārds: ' + targetWord.join(' '))
 
-    let guesses: number = 0;
-    const maxGuesses: number = word.length+3;
+  while (guesses < maxGuesses) {
+    const response = await prompts({
+      type: 'text',
+      name: 'letter',
+      message: 'Enter a letter: ',
+      validate: (letter: string) => letter.length === 1 && /[a-zA-Z]/.test(letter) ? true : 'Please enter a single letter'
+    });
 
-    console.log('Vārds: '+targetWord.join(' '))
+    const letter: string = response.letter.toLowerCase();
+    let found: boolean = false;
 
-    while (guesses < maxGuesses) {
-
-    
-        const response = await prompts({
-            type: 'text',
-            name: 'letter',
-            message: 'Enter letter: ',
-          });
-
-        console.log(wordParts.includes(response.letter));
-
-        let letterPosition = wordParts.indexOf(response.letter); // position of typed letter
-
-            // check if letter exists in word
-          if (letterPosition > -1) {
-            targetWord[letterPosition] = response.letter; // letter gets inserted
-            wordParts[letterPosition] = '-'
-
-            if (word == targetWord.join('')) {
-              console.log("Correct! The word was: " +  targetWord.join(''));
-              break;
-            }
-          }
-        
-          guesses++;
-          
-          console.log('Vārds: '+targetWord.join(' '))
-          console.log('')
+    for (let i: number = 0; i < wordParts.length; i++) {
+      if (wordParts[i] === letter && targetWord[i] !== letter) {
+        targetWord[i] = letter;
+        found = true;
+      }
     }
 
-    if (word != targetWord.join('')) {
-      console.log("You loose!");
+    if (found) {
+      console.log(`Correct! The letter '${letter}' is in the word.`);
+    } else {
+      console.log(`Incorrect! The letter '${letter}' is not in the word.`);
     }
 
+    if (word === targetWord.join('')) {
+      console.log("Congratulations! You guessed the word: " + word);
+      return;
+    }
 
+    guesses++;
 
+    console.log('Word: ' + targetWord.join(' '));
+    console.log(`Guesses left: ${maxGuesses - guesses}\n`);
+  }
 
-
+  console.log("You lose! The word was: " + word);
 })();

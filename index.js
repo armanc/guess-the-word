@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 var prompts = require('prompts');
 (function () { return __awaiter(_this, void 0, void 0, function () {
-    var words, word, wordParts, targetWord, guesses, maxGuesses, response, letterPosition;
+    var words, word, wordParts, targetWord, guesses, maxGuesses, response, letter, found, i;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -47,7 +47,7 @@ var prompts = require('prompts');
                     'destroyer',
                     'typescrypt'
                 ];
-                word = words[(Math.random() * words.length) | 0];
+                word = words[Math.floor(Math.random() * words.length)];
                 wordParts = word.split('');
                 targetWord = '_'.repeat(word.length).split('');
                 guesses = 0;
@@ -59,29 +59,35 @@ var prompts = require('prompts');
                 return [4 /*yield*/, prompts({
                         type: 'text',
                         name: 'letter',
-                        message: 'Enter letter: ',
+                        message: 'Enter a letter: ',
+                        validate: function (letter) { return letter.length === 1 && /[a-zA-Z]/.test(letter) ? true : 'Please enter a single letter'; }
                     })];
             case 2:
                 response = _a.sent();
-                console.log(wordParts.includes(response.letter));
-                letterPosition = wordParts.indexOf(response.letter);
-                // check if letter exists in word
-                if (letterPosition > -1) {
-                    targetWord[letterPosition] = response.letter; // letter gets inserted
-                    wordParts[letterPosition] = '-';
-                    if (word == targetWord.join('')) {
-                        console.log("Correct! The word was " + targetWord.join(' '));
-                        return [3 /*break*/, 3];
+                letter = response.letter.toLowerCase();
+                found = false;
+                for (i = 0; i < wordParts.length; i++) {
+                    if (wordParts[i] === letter && targetWord[i] !== letter) {
+                        targetWord[i] = letter;
+                        found = true;
                     }
                 }
+                if (found) {
+                    console.log("Correct! The letter '".concat(letter, "' is in the word."));
+                }
+                else {
+                    console.log("Incorrect! The letter '".concat(letter, "' is not in the word."));
+                }
+                if (word === targetWord.join('')) {
+                    console.log("Congratulations! You guessed the word: " + word);
+                    return [2 /*return*/];
+                }
                 guesses++;
-                console.log('Vārds: ' + targetWord.join(' '));
-                console.log('');
+                console.log('Word: ' + targetWord.join(' '));
+                console.log("Guesses left: ".concat(maxGuesses - guesses, "\n"));
                 return [3 /*break*/, 1];
             case 3:
-                if (word != targetWord.join('')) {
-                    console.log("You loose!");
-                }
+                console.log("You lose! The word was: " + word);
                 return [2 /*return*/];
         }
     });
